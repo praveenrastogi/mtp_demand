@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demand-deployment
+  labels:
+    app: demand
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: demand
+  template:
+    metadata:
+      labels:
+        app: demand
+    spec:
+      containers:
+        - name: demand
+          image: '556095356826.dkr.ecr.ap-south-1.amazonaws.com/mtp_demand:latest'
+          ports:
+            - containerPort: 9090
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: demand-service
+  labels:
+    name: demand
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: demand
+  type: LoadBalancer
